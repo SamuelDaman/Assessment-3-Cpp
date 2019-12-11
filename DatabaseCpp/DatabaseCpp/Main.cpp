@@ -8,9 +8,13 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+//  This holds the information on the players in the database.
 Player * players = new Player[100];
 int index = 0;
 
+///<summary>
+/// This allows the player to select which player, in the array, they want to edit.
+///</summary>
 void SelectIndex()
 {
 	system("CLS");
@@ -33,6 +37,9 @@ void SelectIndex()
 	}
 }
 
+///<summary>
+///  This allows the player to enter player info into the database.
+///</summary>
 Player EnterPlayer()
 {
 	system("CLS");
@@ -155,6 +162,9 @@ Player EnterPlayer()
 	return player;
 }
 
+///<summary>
+///  This is used to delete a player from the database. But it hasn't been tested yet.
+///</summary>
 void DeletePlayer(Player player)
 {
 	system("CLS");
@@ -162,6 +172,9 @@ void DeletePlayer(Player player)
 	delete[]&players[index];
 }
 
+///<summary>
+///  This prints a player's info to the console.
+///</summary>
 void PrintInfo(Player player)
 {
 	system("CLS");
@@ -176,6 +189,9 @@ void PrintInfo(Player player)
 	cout << "Age: " << player.age << endl;
 }
 
+///<summary>
+///  This is where the main game is run.
+///</summary>
 int main()
 {
 	SelectIndex();

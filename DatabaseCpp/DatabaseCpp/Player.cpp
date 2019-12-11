@@ -2,6 +2,7 @@
 
 #include "Player.h"
 
+// These are different constuctor overloads for the Player class.
 Player::Player()
 {
 	(*this).firstName = new char[5] {"John"};
@@ -57,6 +58,7 @@ Player::~Player()
 	delete[] & (*this).age;*/
 }
 
+//  This is used to set two 'Player' classes equal to each other.
 Player Player::operator=(const Player &rhs)
 {
 	(*this).firstName = rhs.firstName;

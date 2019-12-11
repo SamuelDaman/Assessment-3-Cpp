@@ -2,6 +2,9 @@
 
 #pragma once
 
+///<summary>
+///  This holds information on individual players.
+///</summary>
 class Player
 {
 public:
