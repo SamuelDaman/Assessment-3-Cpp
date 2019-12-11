@@ -58,6 +58,7 @@ int main()
 					break;
 				}
 			}
+			cout << endl;
 		}
 		if (zerglingAlive(swarm, SWARMSIZE)) // if there's at least one zergling alive
 		{
@@ -76,6 +77,7 @@ int main()
 					break;
 				}
 			}
+			cout << endl;
 		}
 	}
 
