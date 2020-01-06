@@ -5,20 +5,20 @@
 // These are different constuctor overloads for the Player class.
 Player::Player()
 {
-	(*this).firstName = new char[5] {"John"};
-	(*this).title = new char[7]{ "Boring" };
-	(*this).lastName = new char[6] {"Smith"};
-	(*this).game = new char[12] {"Tic-Tac-Toe"};
-	(*this).careerWins = 12;
-	(*this).age = 24;
+	(*this).firstName = new char[12] {"[FirstName]"};
+	(*this).title = nullptr;
+	(*this).lastName = new char[11] {"[LastName]"};
+	(*this).game = new char[7] {"[Game]"};
+	(*this).careerWins = 0;
+	(*this).age = 0;
 }
 Player::Player(char * firstName, char * lastName, int age)
 {
 	(*this).firstName = firstName;
 	(*this).title = nullptr;
 	(*this).lastName = lastName;
-	(*this).game = new char[12] {"Tic-Tac-Toe"};
-	(*this).careerWins = 12;
+	(*this).game = new char[7] {"[Game]"};
+	(*this).careerWins = 0;
 	(*this).age = age;
 }
 Player::Player(char * firstName, char * title, char * lastName, int age)
@@ -26,8 +26,8 @@ Player::Player(char * firstName, char * title, char * lastName, int age)
 	(*this).firstName = firstName;
 	(*this).title = title;
 	(*this).lastName = lastName;
-	(*this).game = new char[12] {"Tic-Tac-Toe"};
-	(*this).careerWins = 12;
+	(*this).game = new char[7]{ "[Game]" };
+	(*this).careerWins = 0;
 	(*this).age = age;
 }
 Player::Player(char * firstName, char * lastName, char * game, int careerWins, int age)
@@ -50,12 +50,12 @@ Player::Player(char * firstName, char * title, char * lastName, char * game, int
 }
 Player::~Player() 
 {
-	/*delete[](*this).firstName;
-	delete[](*this).title;
-	delete[](*this).lastName;
-	delete[](*this).game;
-	delete[] & (*this).careerWins;
-	delete[] & (*this).age;*/
+	(*this).firstName = nullptr;
+	(*this).title = nullptr;
+	(*this).lastName = nullptr;
+	(*this).game = nullptr;
+	(*this).careerWins = 0;
+	(*this).age = 0;
 }
 
 //  This is used to set two 'Player' classes equal to each other.

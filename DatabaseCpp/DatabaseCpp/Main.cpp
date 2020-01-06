@@ -9,18 +9,44 @@ using std::cin;
 using std::endl;
 
 //  This holds the information on the players in the database.
-Player * players = new Player[100];
+Player * players;
 int index = 0;
 
+
 ///<summary>
-/// This allows the player to select which player, in the array, they want to edit.
+///  This prompts the player to choose the size of the array.
+///</summary>
+void SetSize()
+{
+	system("CLS");
+	while (true)
+	{
+		cout << "Enter the number of players the database should contain." << endl << "> ";
+		int input;
+		cin >> input;
+		if (cin.fail())
+		{
+			cout << "Invalid Input" << std::endl;
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+		else
+		{
+			players = new Player[input];
+			break;
+		}
+	}
+}
+
+///<summary>
+///  This allows the player to select which player, in the array, they want to edit.
 ///</summary>
 void SelectIndex()
 {
 	system("CLS");
 	while (true)
 	{
-		cout << "Enter the index of the player whose information you want to alter." << endl << "> ";
+		cout << "Enter the index of the player whose information you want to access." << endl << "> ";
 		int input;
 		cin >> input;
 		if (cin.fail())
@@ -169,7 +195,8 @@ void DeletePlayer(Player player)
 {
 	system("CLS");
 	SelectIndex();
-	delete[]&players[index];
+	players[index] = Player();
+	//delete[] players;
 }
 
 ///<summary>
@@ -178,15 +205,19 @@ void DeletePlayer(Player player)
 void PrintInfo(Player player)
 {
 	system("CLS");
-	cout << "Name: " << player.firstName << ' ';
-	if (player.title != nullptr)
+	if (&player != nullptr)
 	{
-		cout << '"' << player.title << '"' << ' ';
+		cout << "Name: " << player.firstName << ' ';
+		if (player.title != nullptr)
+		{
+			cout << '"' << player.title << '"' << ' ';
+		}
+		cout << player.lastName << endl;
+		cout << "Game: " << player.game << endl;
+		cout << "Wins: " << player.careerWins << endl;
+		cout << "Age: " << player.age << endl;
+		cout << endl;
 	}
-	cout << player.lastName << endl;
-	cout << "Game: " << player.game << endl;
-	cout << "Wins: " << player.careerWins << endl;
-	cout << "Age: " << player.age << endl;
 }
 
 ///<summary>
@@ -194,9 +225,52 @@ void PrintInfo(Player player)
 ///</summary>
 int main()
 {
+	while (true)
+	{
+		SetSize();
+		while (true)
+		{
+			cout << "Would you like to (A)dd a player to the database, (P)rint a player's information, (D)elete a player's info, or (R)eset the database?" << endl << "> ";
+			char input;
+			cin >> input;
+			if (cin.fail())
+			{
+				cout << "Invalid Input" << std::endl;
+				cin.clear();
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			}
+			else if (input == 'A' || input == 'a')
+			{
+				cin.clear();
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				SelectIndex();
+				players[index] = EnterPlayer();
+				PrintInfo(players[index]);
+			}
+			else if (input == 'P' || input == 'p')
+			{
+				cin.clear();
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				SelectIndex();
+				PrintInfo(players[index]);
+			}
+			else if (input == 'D' || input == 'd')
+			{
+				cin.clear();
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				DeletePlayer(players[index]);
+			}
+			else
+			{
+				cout << "Invalid Input" << std::endl;
+				cin.clear();
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			}
+		}
+	}
 	SelectIndex();
 	players[index] = EnterPlayer();
 	PrintInfo(players[index]);
 	while (true) {}
-	delete players;
+	delete[] players;
 }

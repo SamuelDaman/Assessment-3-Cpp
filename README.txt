@@ -5,4 +5,4 @@ The Debugging project is functional.
 It must be run in Visual Studio.
 
 The Tic-Tac-Toe project is complete and built.
-It can be run with and executable in the "Release" Folder.
+It can be run with an executable in the "Release" Folder.
