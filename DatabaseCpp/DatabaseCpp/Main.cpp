@@ -10,27 +10,70 @@ using std::endl;
 
 //  This holds the information on the players in the database.
 Player * players;
-int size = 1;
-int index = 0;
+size_t size = 1;
+size_t index = 0;
 
 ///<summary>
-///  This prompts the player to choose the size of the array.
+///  This increases the size of the array.
 ///</summary>
-void SetSize()
+Player * IncreaseSize(Player * arr, size_t arrSize)
 {
-	players = new Player[size];
+	Player * newArr = new Player[arrSize + 1];
+	for (size_t i = 0; i < arrSize; i++)
+	{
+		if (i == index)
+		{
+			newArr[i] = arr[arrSize - 1];
+		}
+		else if (i > index)
+		{
+			newArr[i] = arr[i - 1];
+		}
+		else if (i < index)
+		{
+			newArr[i] = arr[i];
+		}
+	}
+	size++;
+	return newArr;
 }
 
 ///<summary>
-///  This allows the player to select which player, in the array, they want to edit.
+///  This decreases the size of the array.
 ///</summary>
-void SelectIndex()
+Player * DecreaseSize(Player * arr, size_t arrSize)
+{
+	Player * newArr = new Player[arrSize - 1];
+	for (size_t i = 0; i < arrSize - 1; i++)
+	{
+		if (i == index)
+		{
+			continue;
+		}
+		else if (i > index)
+		{
+			newArr[i - 1] = arr[i];
+		}
+		else if (i < index)
+		{
+			newArr[i] = arr[i];
+		}
+	}
+	size--;
+	return newArr;
+}
+
+///<summary>
+///  This allows the player to select where, in the array, they want to add the player.
+///</summary>
+void AddIndex()
 {
 	system("CLS");
 	while (true)
 	{
-		cout << "Enter the index of the player whose information you want to access." << endl << "> ";
-		int input;
+		cout << "Enter the index of the location you want to access." << endl
+			<< "You can access anywhere from 0 to " << size - 1 << endl << "> ";
+		size_t input;
 		cin >> input;
 		if (cin.fail())
 		{
@@ -38,7 +81,7 @@ void SelectIndex()
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
-		else if (input < size || input < 0)
+		else if (input > size - 1 || input < 0)
 		{
 			cout << "Invalid Input" << std::endl;
 			cin.clear();
@@ -49,6 +92,45 @@ void SelectIndex()
 			index = input;
 			break;
 		}
+	}
+}
+
+///<summary>
+///  This allows the player to select which player in the array, they want to access.
+///</summary>
+void SelectIndex()
+{
+	system("CLS");
+	if (size > 1)
+	{
+		while (true)
+		{
+			cout << "Enter the index of the location you want to access." << endl
+				<< "You can access anywhere from 0 to " << size - 2 << endl << "> ";
+			size_t input;
+			cin >> input;
+			if (cin.fail())
+			{
+				cout << "Invalid Input" << std::endl;
+				cin.clear();
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			}
+			else if (input > size - 2 || input < 0)
+			{
+				cout << "Invalid Input" << std::endl;
+				cin.clear();
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			}
+			else
+			{
+				index = input;
+				break;
+			}
+		}
+	}
+	else
+	{
+		return;
 	}
 }
 
@@ -174,17 +256,26 @@ Player EnterPlayer()
 		}
 	}
 	player = Player(firstName, title, lastName, game, careerWins, age);
+	system("CLS");
 	return player;
 }
 
 ///<summary>
 ///  This is used to delete a player from the database. But it hasn't been tested yet.
 ///</summary>
-void DeletePlayer(Player player)
+void DeletePlayer()
 {
 	system("CLS");
-	SelectIndex();
-	players[index] = Player();
+	if (size > 1)
+	{
+		SelectIndex();
+		players = DecreaseSize(players, size);
+		system("CLS");
+	}
+	else
+	{
+		cout << "There is nothing to delete." << endl;
+	}
 }
 
 ///<summary>
@@ -193,7 +284,7 @@ void DeletePlayer(Player player)
 void PrintInfo(Player player)
 {
 	system("CLS");
-	if (&player != nullptr)
+	if (size > 1)
 	{
 		cout << "Name: " << player.firstName << ' ';
 		if (player.title != nullptr)
@@ -206,6 +297,10 @@ void PrintInfo(Player player)
 		cout << "Age: " << player.age << endl;
 		cout << endl;
 	}
+	else
+	{
+		cout << "There is nothing to print." << endl;
+	}
 }
 
 ///<summary>
@@ -213,10 +308,12 @@ void PrintInfo(Player player)
 ///</summary>
 int main()
 {
-	SetSize();
+	players = new Player[size];
 	while (true)
 	{
-		cout << "Would you like to (A)dd a player to the database, (P)rint a player's information, or (D)elete a player's info?" << endl << "> ";
+		cout << "Would you like to (A)dd a player to the database, (E)dit and existing player's info," << endl
+			<< "(D)elete a player's info, or (P)rint a player's information?" << endl
+			<< "Or, enter (C) if you want to close the program." << endl << "> ";
 		char input;
 		cin >> input;
 		if (cin.fail())
@@ -229,22 +326,47 @@ int main()
 		{
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			SelectIndex();
-			players[index] = EnterPlayer();
+
+			AddIndex();
+			players[size - 1] = EnterPlayer();
+			players = IncreaseSize(players, size);
 			PrintInfo(players[index]);
 		}
-		else if (input == 'P' || input == 'p')
+		else if (input == 'E' || input == 'e')
 		{
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			SelectIndex();
-			PrintInfo(players[index]);
+
+			if (size > 1)
+			{
+				SelectIndex();
+				players[index] = EnterPlayer();
+				PrintInfo(players[index]);
+			}
+			else
+			{
+				system("CLS");
+				cout << "There is nothing to edit." << endl;
+			}
 		}
 		else if (input == 'D' || input == 'd')
 		{
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			DeletePlayer(players[index]);
+
+			DeletePlayer();
+		}
+		else if (input == 'P' || input == 'p')
+		{
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+			SelectIndex();
+			PrintInfo(players[index]);
+		}
+		else if (input == 'C' || input == 'c')
+		{
+			break;
 		}
 		else
 		{
@@ -253,9 +375,8 @@ int main()
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 	}
-	SelectIndex();
+	/*SelectIndex();
 	players[index] = EnterPlayer();
-	PrintInfo(players[index]);
-	while (true) {}
+	PrintInfo(players[index]);*/
 	delete[] players;
 }
